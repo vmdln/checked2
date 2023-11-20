@@ -50,3 +50,58 @@ wrapper!(i16);
 wrapper!(i32);
 wrapper!(i64);
 wrapper!(i128);
+
+#[cfg(test)]
+mod tests {
+    use crate::Checked;
+
+    #[test]
+    fn add_0() {
+        (Checked(u8::MAX - 1) + Checked(1)).unwrap();
+    }
+
+    #[test]
+    #[should_panic]
+    fn add_1() {
+        (Checked(u8::MAX) + Checked(1)).unwrap();
+    }
+
+    #[test]
+    fn sub_0() {
+        (Checked(1_u8) - Checked(1)).unwrap();
+    }
+
+    #[test]
+    #[should_panic]
+    fn sub_1() {
+        (Checked(0_u8) - Checked(1)).unwrap();
+    }
+
+    #[test]
+    fn mul_0() {
+        (Checked(16_u8) * Checked(15)).unwrap();
+    }
+
+    #[test]
+    #[should_panic]
+    fn mul_1() {
+        (Checked(16_u8) * Checked(16)).unwrap();
+    }
+
+    #[test]
+    fn div_0() {
+        (Checked(255_u8) / Checked(16_u8)).unwrap();
+    }
+
+    #[test]
+    #[should_panic]
+    fn div_1() {
+        (Checked(255_u8) / Checked(0)).unwrap();
+    }
+
+    #[test]
+    #[should_panic]
+    fn div_2() {
+        (Checked(i8::MIN) / Checked(-1)).unwrap();
+    }
+}
